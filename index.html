@@ -10,10 +10,11 @@
             <center><h3>Assignment 3: Vega-Lite Visualization for building inventory dataset</h3></center>
         </div>
 		<p>
-			Plot 1 is a scatter plot which plots a relationship between the years of all buildings Constructed vs Acquired. This scatter plot is an interactive click-and-drag plot. The area selected reflects in the bar graph adjacent to it
-			which conveys the number of properties acquired by the people in that selected range.
+			Plot 1 is a scatter plot which plots a relationship between the years of all buildings Constructed vs Acquired. 
+			This scatter plot is an interactive click-and-drag plot. The area selected reflects in the bar graph adjacent to it
+			which conveys the total number of properties acquired by the Congressionals in that selected range.
 			<br>
-			Plot 2 shows the total square footage acquired by the person.
+			Plot 2 shows the Total Square Footage acquired by the different Congressionals.
 		</p>
 		<br>
         <center><div id="myviz"></div><center>
@@ -24,42 +25,46 @@
         "data": {"url": "https://raw.githubusercontent.com/Ankita-Khiratkar/ankitakhiratkar.github.io/master/building_inventory.csv"},
         "columns": 2,
         "concat":[{
-            "mark": "circle",
-            "transform": [{"filter": {"field": "Year Acquired", "gt" : 0}}, {"filter" :{"field":"Year Constructed", "gt": 0}}],
-            "selection": {"clickanddrag": {"type": "interval", "encodings": ["y"]}},
-            "encoding": {
-            "x": {"field": "Year Constructed", "type": "quantitative", "scale": {"domain": [1700,2050]}},
-            "y": {"field": "Year Acquired", "type": "quantitative", "scale": {"domain": [1700,2050]}},
-            "tooltip": [
-                {"field": "Congressional Full Name", "type": "nominal"},
-                {"field": "Year Acquired", "type": "quantitative"}],
-             "opacity": {"condition": {"selection":"clickanddrag"}, "value": 0.2}}
-         },
-         {
-             "layer": [{
-                 "mark": "bar",
-                 "encoding": {
-                     "x": {"field": "Congressional Full Name", "type": "ordinal"},
-                     "y": {"aggregate": "count", "type": "quantitative"},
-                     "opacity": {"value": 0.2}}
-              },
-              {
-                  "mark": "bar",
-                  "transform": [{"filter": {"selection": "clickanddrag"}}],
-                  "encoding": {
-                  "x": {"field": "Congressional Full Name", "type": "ordinal"},
-                  "y": {"aggregate": "count", "type": "quantitative"}
-                  }
-              }]
+		"title": "Plot 1: Year Constructed vs Year Acquired",
+            	"mark": "circle",
+		"height": 400,
+            	"width": 400,
+            	"transform": [{"filter": {"field": "Year Acquired", "gt" : 0}}, {"filter" :{"field":"Year Constructed", "gt": 0}}],
+            	"selection": {"clickanddrag": {"type": "interval", "encodings": ["y"]}},
+            	"encoding": {
+            	"x": {"field": "Year Constructed", "type": "quantitative", "scale": {"domain": [1700, 2050]}},
+            	"y": {"field": "Year Acquired", "type": "quantitative", "scale": {"domain": [1700, 2050]}},
+            	"tooltip": [{"field": "Congressional Full Name", "type": "nominal"}, {"field": "Year Acquired", "type": "quantitative"}],
+             	"opacity": {"condition": {"selection":"clickanddrag"}, "value": 0.2}}
+         	},
+         	{
+             	"layer": [{
+                 	"mark": "bar",
+                 	"encoding": {
+                     	"x": {"field": "Congressional Full Name", "type": "ordinal"},
+                     	"y": {"aggregate": "count", "type": "quantitative"},
+                     	"opacity": {"value": 0.2}}
+              	},
+              	{
+			"mark": "bar",
+			"height": 350,
+                  	"transform": [{"filter": {"selection": "clickanddrag"}}],
+                  	"encoding": {
+                  	"x": {"field": "Congressional Full Name", "type": "ordinal"},
+                  	"y": {"aggregate": "count", "type": "quantitative"}}
+		}]
           },
           {
-              "mark": "bar",
-              "encoding": {
-                  "x": {
-                      "aggregate": {"sum": "Square Footage"},
-                      "field": "Square Footage",
-                      "type": "quantitative"},
-                  "y": {"field": "Congressional Full Name", "type": "nominal"}}
+		  "title": "Plot 2: Total Square Footage per Congressionals",
+		  "mark": "bar",
+		  "width": 400,
+		  "encoding": {
+			  "x": {
+				  "aggregate": {"sum": "Square Footage"},
+				  "field": "Square Footage",
+				  "type": "quantitative"
+			  },
+			  "y": {"field": "Congressional Full Name", "type": "nominal"}}
            }]};
         vegaEmbed('#myviz', mySpec);
     </script>
