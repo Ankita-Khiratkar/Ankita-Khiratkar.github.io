@@ -1,0 +1,43 @@
+<html>
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+        <title>This is my example homepage.</title>
+    </head>
+    <body>
+        <p>
+            This is some text.
+        </p>
+        <p>
+            This is some more text!!
+        </p>
+        <div id="myviz">
+        </div>
+    </body>
+    <script>
+        mySpec = {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "data": {"url": "https://raw.githubusercontent.com/Ankita-Khiratkar/ankitakhiratkar.github.io/master/building_inventory.csv"},
+            "hconcat":[{
+                "mark": "circle",
+                "transform": [{"filter": {"field": "Year Acquired", "gt" : 0}}, {"filter" :{"field":"Year Constructed", "gt": 0}}],
+                "encoding": {
+                    "x": {"field": "Year Constructed", "type": "quantitative", "scale": {"domain": [1700,2050]}},
+                    "y": {"field": "Year Acquired", "type": "quantitative", "scale": {"domain": [1700,2050]}}}
+            },
+            {
+            "mark": "bar",
+            "encoding": {
+                "x": {
+                    "aggregate": {"sum": "Square Footage"},
+                    "field": "Square Footage",
+                    "type": "quantitative"
+                    },
+                "y": {"field": "Congressional Full Name", "type": "nominal"}
+                }
+        }]    
+};
+        vegaEmbed('#myviz', mySpec);
+    </script>
+</html>
