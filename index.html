@@ -17,27 +17,47 @@
     </body>
     <script>
         mySpec = {
-            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-            "data": {"url": "https://raw.githubusercontent.com/Ankita-Khiratkar/ankitakhiratkar.github.io/master/building_inventory.csv"},
-            "hconcat":[{
-                "mark": "circle",
-                "transform": [{"filter": {"field": "Year Acquired", "gt" : 0}}, {"filter" :{"field":"Year Constructed", "gt": 0}}],
-                "encoding": {
-                    "x": {"field": "Year Constructed", "type": "quantitative", "scale": {"domain": [1700,2050]}},
-                    "y": {"field": "Year Acquired", "type": "quantitative", "scale": {"domain": [1700,2050]}}}
-            },
-            {
-            "mark": "bar",
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "data": {"url": "https://raw.githubusercontent.com/Ankita-Khiratkar/ankitakhiratkar.github.io/master/building_inventory.csv"},
+        "columns": 2,
+        "concat":[{
+            "mark": "circle",
+            "transform": [{"filter": {"field": "Year Acquired", "gt" : 0}}, {"filter" :{"field":"Year Constructed", "gt": 0}}],
+            "selection": {"clickanddrag": {"type": "interval", "encodings": ["y"]}},
             "encoding": {
-                "x": {
-                    "aggregate": {"sum": "Square Footage"},
-                    "field": "Square Footage",
-                    "type": "quantitative"
-                    },
-                "y": {"field": "Congressional Full Name", "type": "nominal"}
-                }
-        }]    
-};
+            "x": {"field": "Year Constructed", "type": "quantitative", "scale": {"domain": [1700,2050]}},
+            "y": {"field": "Year Acquired", "type": "quantitative", "scale": {"domain": [1700,2050]}},
+            "tooltip": [
+                {"field": "Congressional Full Name", "type": "nominal"},
+                {"field": "Year Acquired", "type": "quantitative"}],
+             "opacity": {"condition": {"selection":"clickanddrag"}, "value": 0.2}}
+         },
+         {
+             "layer": [{
+                 "mark": "bar",
+                 "encoding": {
+                     "x": {"field": "Congressional Full Name", "type": "ordinal"},
+                     "y": {"aggregate": "count", "type": "quantitative"},
+                     "opacity": {"value": 0.2}}
+              },
+              {
+                  "mark": "bar",
+                  "transform": [{"filter": {"selection": "clickanddrag"}}],
+                  "encoding": {
+                  "x": {"field": "Congressional Full Name", "type": "ordinal"},
+                  "y": {"aggregate": "count", "type": "quantitative"}
+                  }
+              }]
+          },
+          {
+              "mark": "bar",
+              "encoding": {
+                  "x": {
+                      "aggregate": {"sum": "Square Footage"},
+                      "field": "Square Footage",
+                      "type": "quantitative"},
+                  "y": {"field": "Congressional Full Name", "type": "nominal"}}
+           }]};
         vegaEmbed('#myviz', mySpec);
     </script>
 </html>
